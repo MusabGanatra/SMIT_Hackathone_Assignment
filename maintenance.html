@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Maintenance Management</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Maintenance Management</h1>
+
+<div class="form-box">
+
+<p>
+View reported issues and resolve them after maintenance.
+</p>
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Issue Title</th>
+<th>Priority</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="maintenanceTable">
+
+</tbody>
+
+</table>
+
+<br>
+
+<div class="actions">
+
+<a href="dashboard.html">Dashboard</a>
+
+<a href="assets.html">Assets</a>
+
+<a href="history.html">History</a>
+
+</div>
+
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/maintenance.js"></script>
+
+</body>
+</html>

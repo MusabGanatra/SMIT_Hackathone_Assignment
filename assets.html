@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Assets Management</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Assets Management</h1>
+
+<div class="form-box">
+
+<h2>Add New Asset</h2>
+
+<input
+type="text"
+id="assetName"
+placeholder="Asset Name"
+>
+
+<input
+type="text"
+id="category"
+placeholder="Category"
+>
+
+<input
+type="text"
+id="location"
+placeholder="Location"
+>
+
+<select id="condition">
+
+<option>Good</option>
+<option>Fair</option>
+<option>Poor</option>
+
+</select>
+
+<button
+class="btn"
+onclick="addAsset()"
+>
+Add Asset
+</button>
+
+</div>
+
+<input
+type="text"
+id="searchBox"
+placeholder="Search Asset"
+onkeyup="searchAsset()"
+>
+
+<br><br>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Code</th>
+<th>Name</th>
+<th>Category</th>
+<th>Location</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="assetTable"></tbody>
+
+</table>
+
+<br>
+
+<div class="actions">
+
+<a href="dashboard.html">Dashboard</a>
+
+<a href="maintenance.html">Maintenance</a>
+
+<a href="history.html">History</a>
+
+</div>
+
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/assets.js"></script>
+
+</body>
+</html>

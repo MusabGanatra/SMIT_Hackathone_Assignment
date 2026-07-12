@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Report Issue</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Report Asset Issue</h1>
+
+<div class="form-box">
+
+<input
+type="text"
+id="title"
+placeholder="Issue Title"
+>
+
+<textarea
+id="description"
+placeholder="Issue Description"
+rows="5"
+></textarea>
+
+<select id="priority">
+
+<option value="Low">Low</option>
+
+<option value="Medium">Medium</option>
+
+<option value="High">High</option>
+
+<option value="Critical">Critical</option>
+
+</select>
+
+<button
+class="btn"
+onclick="submitIssue()"
+>
+Submit Issue
+</button>
+
+</div>
+
+<div class="actions">
+
+<a href="assets.html">Assets</a>
+
+<a href="dashboard.html">Dashboard</a>
+
+</div>
+
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/issues.js"></script>
+
+</body>
+</html>

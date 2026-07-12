@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Public Asset Information</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Public Asset Information</h1>
+
+<div class="form-box">
+
+<div id="assetData">
+
+<p>Loading Asset Information...</p>
+
+</div>
+
+</div>
+
+<div class="form-box">
+
+<h2>Report Asset Issue</h2>
+
+<a id="reportBtn">
+<button class="btn">
+Report Issue
+</button>
+</a>
+
+</div>
+
+<div class="actions">
+
+<a href="assets.html">Assets</a>
+
+<a href="dashboard.html">Dashboard</a>
+
+</div>
+
+</div>
+
+<script src="js/supabase.js"></script>
+
+<script>
+
+const params =
+new URLSearchParams(window.location.search);
+
+const assetId =
+params.get("id");
+
+
+async function loadAsset(){
+
+if(!assetId){
+document.getElementById("assetData").innerHTML =
+"<p>Asset ID Missing</p>";
+return;
+}
+
+const { data, error } =
+await supabaseClient
+.from("assets")
+.select("*")
+.eq("id", assetId)
+.single();
+
+if(error){
+
+document.getElementById("assetData").innerHTML =
+"<p>Asset Not Found</p>";
+
+return;
+}
+
+
+document.getElementById("assetData").innerHTML = `
+
+<h2>${data.name}</h2>
+
+<p>
+<strong>Asset Code:</strong>
+${data.asset_code}
+</p>
+
+<p>
+<strong>Category:</strong>
+${data.category}
+</p>
+
+<p>
+<strong>Location:</strong>
+${data.location}
+</p>
+
+<p>
+<strong>Condition:</strong>
+${data.condition}
+</p>
+
+<p>
+<strong>Status:</strong>
+${data.status}
+</p>
+
+`;
+
+document.getElementById("reportBtn").href =
+"report-issue.html?id=" + assetId;
+
+}
+
+loadAsset();
+
+</script>
+
+</body>
+</html>

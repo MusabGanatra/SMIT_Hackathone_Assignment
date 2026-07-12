@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MaintainIQ Dashboard</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<h1>MaintainIQ Dashboard</h1>
+
+<div class="cards">
+
+<div class="card">
+<h2 id="assetCount">0</h2>
+<p>Total Assets</p>
+</div>
+
+<div class="card">
+<h2 id="issueCount">0</h2>
+<p>Open Issues</p>
+</div>
+
+<div class="card">
+<h2 id="resolvedCount">0</h2>
+<p>Resolved Issues</p>
+</div>
+
+<div class="card">
+<h2 id="maintenanceCount">0</h2>
+<p>Maintenance Records</p>
+</div>
+
+</div>
+
+<div class="actions">
+
+<a href="assets.html">Assets</a>
+
+<a href="maintenance.html">Maintenance</a>
+
+<a href="history.html">History</a>
+
+<a href="index.html">Logout</a>
+
+</div>
+
+</div>
+
+<script src="js/supabase.js"></script>
+
+<script>
+
+async function loadDashboard(){
+
+// Total Assets
+const { data: assets } =
+await supabaseClient
+.from("assets")
+.select("*");
+
+document.getElementById("assetCount").innerText =
+assets ? assets.length : 0;
+
+
+// Open Issues
+const { data: issues } =
+await supabaseClient
+.from("issues")
+.select("*")
+.eq("status","Reported");
+
+document.getElementById("issueCount").innerText =
+issues ? issues.length : 0;
+
+
+// Resolved Issues
+const { data: resolved } =
+await supabaseClient
+.from("issues")
+.select("*")
+.eq("status","Resolved");
+
+document.getElementById("resolvedCount").innerText =
+resolved ? resolved.length : 0;
+
+
+// Maintenance Records
+const { data: maintenance } =
+await supabaseClient
+.from("maintenance")
+.select("*");
+
+document.getElementById("maintenanceCount").innerText =
+maintenance ? maintenance.length : 0;
+
+}
+
+loadDashboard();
+
+</script>
+
+</body>
+</html>

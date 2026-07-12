@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Asset Details</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Asset Details</h1>
+
+<div class="form-box">
+
+<div id="assetInfo">
+
+<p>Loading Asset...</p>
+
+</div>
+
+</div>
+
+<div class="form-box">
+
+<h2>Asset QR Code</h2>
+
+<canvas id="qrcode"></canvas>
+
+<br><br>
+
+<a id="publicLink" target="_blank">
+<button class="btn">
+Open Public Asset Page
+</button>
+</a>
+
+</div>
+
+<div class="actions">
+
+<a href="assets.html">Back To Assets</a>
+
+<a href="dashboard.html">Dashboard</a>
+
+</div>
+
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/asset-details.js"></script>
+
+</body>
+</html>

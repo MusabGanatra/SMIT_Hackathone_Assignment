@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>History Timeline</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>History Timeline</h1>
+
+<div class="form-box">
+<p>
+All asset activities, issue reports, and maintenance actions are recorded here.
+</p>
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Action</th>
+<th>Actor</th>
+<th>Date & Time</th>
+</tr>
+
+</thead>
+
+<tbody id="historyTable">
+
+</tbody>
+
+</table>
+
+<br>
+
+<div class="actions">
+
+<a href="dashboard.html">Dashboard</a>
+
+<a href="assets.html">Assets</a>
+
+<a href="maintenance.html">Maintenance</a>
+
+</div>
+
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/history.js"></script>
+
+</body>
+</html>
