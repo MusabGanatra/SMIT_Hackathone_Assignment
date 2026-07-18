@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Asset Details</title>
+<title>MaintainIQ - Asset Details</title>
 
 <link rel="stylesheet" href="css/style.css">
 
@@ -15,9 +15,23 @@
 
 <body>
 
+<div class="topbar">
+  <div class="brand">MaintainIQ</div>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="assets.html">Assets</a>
+    <a href="maintenance.html">Maintenance</a>
+    <a href="history.html">History</a>
+    <a href="#" onclick="logout(); return false;">Logout</a>
+  </nav>
+</div>
+
 <div class="container">
 
+<div class="page-header">
 <h1>Asset Details</h1>
+<p class="subtitle">Full record and a scannable QR code for this asset.</p>
+</div>
 
 <div class="form-box">
 
@@ -32,6 +46,7 @@
 <div class="form-box">
 
 <h2>Asset QR Code</h2>
+<p style="margin-top:-6px;">Print this and attach it to the asset. Scanning it opens the public page where anyone can report an issue.</p>
 
 <canvas id="qrcode"></canvas>
 
@@ -42,14 +57,6 @@
 Open Public Asset Page
 </button>
 </a>
-
-</div>
-
-<div class="actions">
-
-<a href="assets.html">Back To Assets</a>
-
-<a href="dashboard.html">Dashboard</a>
 
 </div>
 

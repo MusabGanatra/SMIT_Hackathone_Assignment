@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>History Timeline</title>
+<title>MaintainIQ - History</title>
 
 <link rel="stylesheet" href="css/style.css">
 
@@ -14,14 +14,22 @@
 
 <body>
 
+<div class="topbar">
+  <div class="brand">MaintainIQ</div>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="assets.html">Assets</a>
+    <a href="maintenance.html">Maintenance</a>
+    <a href="history.html">History</a>
+    <a href="#" onclick="logout(); return false;">Logout</a>
+  </nav>
+</div>
+
 <div class="container">
 
+<div class="page-header">
 <h1>History Timeline</h1>
-
-<div class="form-box">
-<p>
-All asset activities, issue reports, and maintenance actions are recorded here.
-</p>
+<p class="subtitle">All asset activities, issue reports, and maintenance actions are recorded here.</p>
 </div>
 
 <table>
@@ -41,18 +49,6 @@ All asset activities, issue reports, and maintenance actions are recorded here.
 </tbody>
 
 </table>
-
-<br>
-
-<div class="actions">
-
-<a href="dashboard.html">Dashboard</a>
-
-<a href="assets.html">Assets</a>
-
-<a href="maintenance.html">Maintenance</a>
-
-</div>
 
 </div>
 

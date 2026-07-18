@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Public Asset Information</title>
+<title>MaintainIQ - Asset Information</title>
 
 <link rel="stylesheet" href="css/style.css">
 
@@ -14,15 +14,22 @@
 
 <body>
 
+<div class="topbar">
+  <div class="brand">MaintainIQ</div>
+</div>
+
 <div class="container">
 
-<h1>Public Asset Information</h1>
+<div class="page-header">
+<h1>Asset Information</h1>
+<p class="subtitle">Scanned from the asset's QR tag.</p>
+</div>
 
 <div class="form-box">
 
 <div id="assetData">
 
-<p>Loading Asset Information...</p>
+<p>Loading asset information...</p>
 
 </div>
 
@@ -30,7 +37,8 @@
 
 <div class="form-box">
 
-<h2>Report Asset Issue</h2>
+<h2>Spotted a problem?</h2>
+<p style="margin-top:-6px;">Let the maintenance team know so they can take a look.</p>
 
 <a id="reportBtn">
 <button class="btn">
@@ -40,90 +48,10 @@ Report Issue
 
 </div>
 
-<div class="actions">
-
-<a href="assets.html">Assets</a>
-
-<a href="dashboard.html">Dashboard</a>
-
-</div>
-
 </div>
 
 <script src="js/supabase.js"></script>
-
-<script>
-
-const params =
-new URLSearchParams(window.location.search);
-
-const assetId =
-params.get("id");
-
-
-async function loadAsset(){
-
-if(!assetId){
-document.getElementById("assetData").innerHTML =
-"<p>Asset ID Missing</p>";
-return;
-}
-
-const { data, error } =
-await supabaseClient
-.from("assets")
-.select("*")
-.eq("id", assetId)
-.single();
-
-if(error){
-
-document.getElementById("assetData").innerHTML =
-"<p>Asset Not Found</p>";
-
-return;
-}
-
-
-document.getElementById("assetData").innerHTML = `
-
-<h2>${data.name}</h2>
-
-<p>
-<strong>Asset Code:</strong>
-${data.asset_code}
-</p>
-
-<p>
-<strong>Category:</strong>
-${data.category}
-</p>
-
-<p>
-<strong>Location:</strong>
-${data.location}
-</p>
-
-<p>
-<strong>Condition:</strong>
-${data.condition}
-</p>
-
-<p>
-<strong>Status:</strong>
-${data.status}
-</p>
-
-`;
-
-document.getElementById("reportBtn").href =
-"report-issue.html?id=" + assetId;
-
-}
-
-loadAsset();
-
-</script>
+<script src="js/public-asset.js"></script>
 
 </body>
 </html>

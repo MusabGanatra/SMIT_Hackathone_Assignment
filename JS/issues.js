@@ -1,92 +1,52 @@
-// Get Asset ID From URL
+// ============================================================
+// MaintainIQ — Report Issue (report-issue.html)
+// This page is reachable by the public via the QR code, so it
+// does not require a login.
+// ============================================================
 
-const params =
-new URLSearchParams(window.location.search);
+const issueParams = new URLSearchParams(window.location.search);
+const issueAssetId = issueParams.get("id");
 
-const assetId =
-params.get("id");
+async function submitIssue() {
+  const title = document.getElementById("title").value.trim();
+  const description = document.getElementById("description").value.trim();
+  const priority = document.getElementById("priority").value;
 
+  if (!issueAssetId) {
+    alert("No asset was specified. Please scan the asset's QR code again.");
+    return;
+  }
 
-// Submit Issue
+  if (!title) {
+    alert("Please enter an issue title.");
+    return;
+  }
 
-async function submitIssue(){
+  const { data, error } = await supabaseClient
+    .from("issues")
+    .insert({
+      asset_id: issueAssetId,
+      title,
+      description,
+      priority,
+      status: "Reported",
+      reported_by: "Public User"
+    })
+    .select()
+    .single();
 
-const title =
-document.getElementById("title").value;
+  if (error) {
+    alert("Could not submit issue: " + error.message);
+    return;
+  }
 
-const description =
-document.getElementById("description").value;
+  await supabaseClient
+    .from("assets")
+    .update({ status: "Under Maintenance" })
+    .eq("id", issueAssetId);
 
-const priority =
-document.getElementById("priority").value;
+  await logHistory(`Issue "${title}" reported`, "issue", data.id);
 
-
-if(title === ""){
-
-alert("Please Enter Issue Title");
-
-return;
-
-}
-
-
-const issueNumber =
-"ISS-" + Date.now();
-
-
-// Save Issue
-
-const { error } =
-await supabaseClient
-.from("issues")
-.insert([
-{
-asset_id: assetId,
-issue_number: issueNumber,
-title: title,
-description: description,
-priority: priority,
-status: "Reported"
-}
-]);
-
-
-if(error){
-
-alert(error.message);
-
-return;
-
-}
-
-
-// Update Asset Status
-
-await supabaseClient
-.from("assets")
-.update({
-status: "Issue Reported"
-})
-.eq("id", assetId);
-
-
-// Add History Record
-
-await supabaseClient
-.from("history")
-.insert([
-{
-asset_id: assetId,
-action: "Issue Reported: " + title,
-actor: "User"
-}
-]);
-
-
-alert("Issue Submitted Successfully");
-
-
-window.location.href =
-"maintenance.html";
-
+  alert("Issue submitted. Thank you for the report.");
+  window.location.href = "public-asset.html?id=" + issueAssetId;
 }

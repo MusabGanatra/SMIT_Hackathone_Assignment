@@ -1,77 +1,83 @@
-const email = document.getElementById("email");
-const password = document.getElementById("password");
+// ============================================================
+// MaintainIQ — Login / Register (index.html)
+// ============================================================
 
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const messageEl = document.getElementById("message");
 const loginBtn = document.getElementById("loginBtn");
 const registerBtn = document.getElementById("registerBtn");
 
-const message = document.getElementById("message");
-
-
-// Register User
-registerBtn.addEventListener("click", async () => {
-
-    if(email.value === "" || password.value === ""){
-        message.innerText = "Please enter email and password";
-        return;
-    }
-
-    const { data, error } =
-    await supabaseClient.auth.signUp({
-        email: email.value,
-        password: password.value
-    });
-
-    if(error){
-        message.innerText = error.message;
-        return;
-    }
-
-    message.style.color = "green";
-    message.innerText = "Registration Successful";
-
-});
-
-
-// Login User
-loginBtn.addEventListener("click", async () => {
-
-    if(email.value === "" || password.value === ""){
-        message.innerText = "Please enter email and password";
-        return;
-    }
-
-    const { data, error } =
-    await supabaseClient.auth.signInWithPassword({
-        email: email.value,
-        password: password.value
-    });
-
-    if(error){
-        message.style.color = "red";
-        message.innerText = error.message;
-        return;
-    }
-
-    message.style.color = "green";
-    message.innerText = "Login Successful";
-
-    setTimeout(() => {
-        window.location.href = "dashboard.html";
-    }, 1000);
-
-});
-
-
-// Check Existing Session
-async function checkSession(){
-
-    const {
-        data: { session }
-    } = await supabaseClient.auth.getSession();
-
-    if(session){
-        window.location.href = "dashboard.html";
-    }
+function showMessage(text, type) {
+  messageEl.textContent = text;
+  messageEl.className = "message " + (type || "");
 }
 
-checkSession();
+function setLoading(isLoading) {
+  loginBtn.disabled = isLoading;
+  registerBtn.disabled = isLoading;
+}
+
+// If already logged in, skip straight to the dashboard.
+(async function checkExistingSession() {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (session) window.location.href = "dashboard.html";
+})();
+
+loginBtn.addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+
+  if (!email || !password) {
+    showMessage("Please enter both email and password.", "error");
+    return;
+  }
+
+  setLoading(true);
+  showMessage("Signing in...");
+
+  const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+  setLoading(false);
+
+  if (error) {
+    showMessage(error.message, "error");
+    return;
+  }
+
+  window.location.href = "dashboard.html";
+});
+
+registerBtn.addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+
+  if (!email || !password) {
+    showMessage("Please enter both email and password.", "error");
+    return;
+  }
+
+  if (password.length < 6) {
+    showMessage("Password must be at least 6 characters.", "error");
+    return;
+  }
+
+  setLoading(true);
+  showMessage("Creating account...");
+
+  const { error } = await supabaseClient.auth.signUp({ email, password });
+
+  setLoading(false);
+
+  if (error) {
+    showMessage(error.message, "error");
+    return;
+  }
+
+  showMessage("Account created. You can now log in.", "success");
+});
+
+// Let Enter submit the login form
+passwordInput.addEventListener("keyup", (e) => {
+  if (e.key === "Enter") loginBtn.click();
+});

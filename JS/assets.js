@@ -1,186 +1,138 @@
-// Add Asset
+// ============================================================
+// MaintainIQ — Assets Management (assets.html)
+// ============================================================
 
-async function addAsset(){
+let allAssets = [];
 
-const assetName =
-document.getElementById("assetName").value;
+(async function init() {
+  await requireAuth();
+  await loadAssets();
+})();
 
-const category =
-document.getElementById("category").value;
+async function generateAssetCode() {
+  const { count } = await supabaseClient
+    .from("assets")
+    .select("*", { count: "exact", head: true });
 
-const location =
-document.getElementById("location").value;
-
-const condition =
-document.getElementById("condition").value;
-
-
-if(assetName === ""){
-alert("Please Enter Asset Name");
-return;
+  const next = (count || 0) + 1;
+  return "AST-" + String(next).padStart(4, "0");
 }
 
-const assetCode =
-"AST-" + Date.now();
+async function loadAssets() {
+  const tbody = document.getElementById("assetTable");
+  tbody.innerHTML = `<tr><td class="empty-row" colspan="6">Loading assets...</td></tr>`;
 
+  const { data, error } = await supabaseClient
+    .from("assets")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-const { error } =
-await supabaseClient
-.from("assets")
-.insert([
-{
-asset_code: assetCode,
-name: assetName,
-category: category,
-location: location,
-condition: condition,
-status: "Operational"
-}
-]);
+  if (error) {
+    tbody.innerHTML = `<tr><td class="empty-row" colspan="6">Failed to load assets: ${escapeHtml(error.message)}</td></tr>`;
+    return;
+  }
 
-
-if(error){
-alert(error.message);
-return;
+  allAssets = data || [];
+  renderAssets(allAssets);
 }
 
-alert("Asset Added Successfully");
+function renderAssets(list) {
+  const tbody = document.getElementById("assetTable");
 
+  if (!list.length) {
+    tbody.innerHTML = `<tr><td class="empty-row" colspan="6">No assets found. Add your first asset above.</td></tr>`;
+    return;
+  }
 
-document.getElementById("assetName").value = "";
-document.getElementById("category").value = "";
-document.getElementById("location").value = "";
-
-loadAssets();
+  tbody.innerHTML = list.map(asset => `
+    <tr>
+      <td>${escapeHtml(asset.asset_code)}</td>
+      <td>${escapeHtml(asset.name)}</td>
+      <td>${escapeHtml(asset.category)}</td>
+      <td>${escapeHtml(asset.location)}</td>
+      <td><span class="${badgeClass(asset.status)}">${escapeHtml(asset.status)}</span></td>
+      <td>
+        <a href="asset-details.html?id=${asset.id}" class="btn small secondary">View</a>
+        <button class="btn small danger" onclick="deleteAsset('${asset.id}')">Delete</button>
+      </td>
+    </tr>
+  `).join("");
 }
 
+async function addAsset() {
+  const name = document.getElementById("assetName").value.trim();
+  const category = document.getElementById("category").value.trim();
+  const location = document.getElementById("location").value.trim();
+  const condition = document.getElementById("condition").value;
 
+  if (!name) {
+    alert("Asset name is required.");
+    return;
+  }
 
-// Load Assets
+  const asset_code = await generateAssetCode();
 
-async function loadAssets(){
+  const { data: { user } } = await supabaseClient.auth.getUser();
 
-const { data, error } =
-await supabaseClient
-.from("assets")
-.select("*")
-.order("created_at",{ascending:false});
+  const { data, error } = await supabaseClient
+    .from("assets")
+    .insert({
+      asset_code,
+      name,
+      category,
+      location,
+      condition,
+      status: "Active",
+      created_by: user ? user.id : null
+    })
+    .select()
+    .single();
 
-if(error){
-console.log(error);
-return;
+  if (error) {
+    alert("Could not add asset: " + error.message);
+    return;
+  }
+
+  await logHistory(`Asset "${name}" added`, "asset", data.id);
+
+  document.getElementById("assetName").value = "";
+  document.getElementById("category").value = "";
+  document.getElementById("location").value = "";
+  document.getElementById("condition").value = "Good";
+
+  await loadAssets();
 }
 
-let rows = "";
+async function deleteAsset(id) {
+  if (!confirm("Delete this asset? This cannot be undone.")) return;
 
-data.forEach(asset=>{
+  const asset = allAssets.find(a => a.id === id);
 
-let statusClass =
-asset.status === "Operational"
-? "status-operational"
-: "status-issue";
+  const { error } = await supabaseClient.from("assets").delete().eq("id", id);
 
-rows += `
-<tr>
+  if (error) {
+    alert("Could not delete asset: " + error.message);
+    return;
+  }
 
-<td>${asset.asset_code}</td>
-
-<td>${asset.name}</td>
-
-<td>${asset.category}</td>
-
-<td>${asset.location}</td>
-
-<td class="${statusClass}">
-${asset.status}
-</td>
-
-<td>
-
-<a href="asset-details.html?id=${asset.id}">
-View
-</a>
-
-|
-
-<a href="#"
-onclick="deleteAsset('${asset.id}')">
-Delete
-</a>
-
-</td>
-
-</tr>
-`;
-
-});
-
-document.getElementById("assetTable").innerHTML =
-rows;
+  await logHistory(`Asset "${asset ? asset.name : id}" deleted`, "asset", id);
+  await loadAssets();
 }
 
+function searchAsset() {
+  const term = document.getElementById("searchBox").value.trim().toLowerCase();
 
+  if (!term) {
+    renderAssets(allAssets);
+    return;
+  }
 
-// Delete Asset
+  const filtered = allAssets.filter(asset =>
+    (asset.name || "").toLowerCase().includes(term) ||
+    (asset.asset_code || "").toLowerCase().includes(term) ||
+    (asset.category || "").toLowerCase().includes(term) ||
+    (asset.location || "").toLowerCase().includes(term)
+  );
 
-async function deleteAsset(id){
-
-const confirmDelete =
-confirm("Are you sure you want to delete this asset?");
-
-if(!confirmDelete){
-return;
+  renderAssets(filtered);
 }
-
-const { error } =
-await supabaseClient
-.from("assets")
-.delete()
-.eq("id",id);
-
-if(error){
-alert(error.message);
-return;
-}
-
-alert("Asset Deleted");
-
-loadAssets();
-}
-
-
-
-// Search Asset
-
-function searchAsset(){
-
-const value =
-document.getElementById("searchBox")
-.value
-.toLowerCase();
-
-const rows =
-document.querySelectorAll("#assetTable tr");
-
-rows.forEach(row=>{
-
-if(
-row.innerText
-.toLowerCase()
-.includes(value)
-){
-row.style.display = "";
-}
-else{
-row.style.display = "none";
-}
-
-});
-
-}
-
-
-
-// Initial Load
-
-loadAssets();

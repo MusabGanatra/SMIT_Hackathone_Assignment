@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>MaintainIQ Dashboard</title>
+<title>MaintainIQ - Dashboard</title>
 
 <link rel="stylesheet" href="css/style.css">
 
@@ -14,9 +14,23 @@
 
 <body>
 
+<div class="topbar">
+  <div class="brand">MaintainIQ</div>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="assets.html">Assets</a>
+    <a href="maintenance.html">Maintenance</a>
+    <a href="history.html">History</a>
+    <a href="#" onclick="logout(); return false;">Logout</a>
+  </nav>
+</div>
+
 <div class="dashboard">
 
-<h1>MaintainIQ Dashboard</h1>
+<div class="page-header">
+<h1>Dashboard</h1>
+<p class="subtitle">A quick overview of every asset, issue, and maintenance record.</p>
+</div>
 
 <div class="cards">
 
@@ -42,72 +56,10 @@
 
 </div>
 
-<div class="actions">
-
-<a href="assets.html">Assets</a>
-
-<a href="maintenance.html">Maintenance</a>
-
-<a href="history.html">History</a>
-
-<a href="index.html">Logout</a>
-
-</div>
-
 </div>
 
 <script src="js/supabase.js"></script>
-
-<script>
-
-async function loadDashboard(){
-
-// Total Assets
-const { data: assets } =
-await supabaseClient
-.from("assets")
-.select("*");
-
-document.getElementById("assetCount").innerText =
-assets ? assets.length : 0;
-
-
-// Open Issues
-const { data: issues } =
-await supabaseClient
-.from("issues")
-.select("*")
-.eq("status","Reported");
-
-document.getElementById("issueCount").innerText =
-issues ? issues.length : 0;
-
-
-// Resolved Issues
-const { data: resolved } =
-await supabaseClient
-.from("issues")
-.select("*")
-.eq("status","Resolved");
-
-document.getElementById("resolvedCount").innerText =
-resolved ? resolved.length : 0;
-
-
-// Maintenance Records
-const { data: maintenance } =
-await supabaseClient
-.from("maintenance")
-.select("*");
-
-document.getElementById("maintenanceCount").innerText =
-maintenance ? maintenance.length : 0;
-
-}
-
-loadDashboard();
-
-</script>
+<script src="js/dashboard.js"></script>
 
 </body>
 </html>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Report Issue</title>
+<title>MaintainIQ - Report Issue</title>
 
 <link rel="stylesheet" href="css/style.css">
 
@@ -14,29 +14,39 @@
 
 <body>
 
+<div class="topbar">
+  <div class="brand">MaintainIQ</div>
+</div>
+
 <div class="container">
 
+<div class="page-header">
 <h1>Report Asset Issue</h1>
+<p class="subtitle">Describe what's wrong and the maintenance team will take it from here.</p>
+</div>
 
 <div class="form-box">
 
+<label>Issue Title</label>
 <input
 type="text"
 id="title"
-placeholder="Issue Title"
+placeholder="e.g. Loud noise when running"
 >
 
+<label>Description</label>
 <textarea
 id="description"
-placeholder="Issue Description"
+placeholder="Any extra details that would help"
 rows="5"
 ></textarea>
 
+<label>Priority</label>
 <select id="priority">
 
 <option value="Low">Low</option>
 
-<option value="Medium">Medium</option>
+<option value="Medium" selected>Medium</option>
 
 <option value="High">High</option>
 
@@ -50,14 +60,6 @@ onclick="submitIssue()"
 >
 Submit Issue
 </button>
-
-</div>
-
-<div class="actions">
-
-<a href="assets.html">Assets</a>
-
-<a href="dashboard.html">Dashboard</a>
 
 </div>
 

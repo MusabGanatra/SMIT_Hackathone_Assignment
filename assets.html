@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Assets Management</title>
+<title>MaintainIQ - Assets</title>
 
 <link rel="stylesheet" href="css/style.css">
 
@@ -14,9 +14,23 @@
 
 <body>
 
+<div class="topbar">
+  <div class="brand">MaintainIQ</div>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="assets.html">Assets</a>
+    <a href="maintenance.html">Maintenance</a>
+    <a href="history.html">History</a>
+    <a href="#" onclick="logout(); return false;">Logout</a>
+  </nav>
+</div>
+
 <div class="container">
 
+<div class="page-header">
 <h1>Assets Management</h1>
+<p class="subtitle">Register new assets and keep track of every item in the field.</p>
+</div>
 
 <div class="form-box">
 
@@ -60,7 +74,7 @@ Add Asset
 <input
 type="text"
 id="searchBox"
-placeholder="Search Asset"
+placeholder="Search by name, code, category or location"
 onkeyup="searchAsset()"
 >
 
@@ -84,18 +98,6 @@ onkeyup="searchAsset()"
 <tbody id="assetTable"></tbody>
 
 </table>
-
-<br>
-
-<div class="actions">
-
-<a href="dashboard.html">Dashboard</a>
-
-<a href="maintenance.html">Maintenance</a>
-
-<a href="history.html">History</a>
-
-</div>
 
 </div>
 
